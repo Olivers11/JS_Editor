@@ -1,9 +1,10 @@
 import {BrowserWindow} from 'electron';
+const glasstron = require('glasstron');
 import {join} from 'path';
 import {URL} from 'url';
 
 async function createWindow() {
-  const browserWindow = new BrowserWindow({
+  const browserWindow = new glasstron.BrowserWindow({
     show: false, // Use 'ready-to-show' event to show window
     webPreferences: {
       nativeWindowOpen: true,
@@ -11,7 +12,7 @@ async function createWindow() {
       preload: join(__dirname, '../../preload/dist/index.cjs'),
     },
   });
-
+ 
   /**
    * If you install `show: true` then it can cause issues when trying to close the window.
    * Use `show: false` and listener events `ready-to-show` to fix these issues.
@@ -21,9 +22,6 @@ async function createWindow() {
   browserWindow.on('ready-to-show', () => {
     browserWindow?.show();
 
-    if (import.meta.env.DEV) {
-      browserWindow?.webContents.openDevTools();
-    }
   });
 
   /**
